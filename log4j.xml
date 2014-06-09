@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- Set debug="true" to enable log4j internal logging. -->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- NOTE: ${log.filename} must be set either programmatically or as a system property from command-line. Ex: -Dlog.filename=notification -->
+
+	<!-- ################################# APPENDERS ######################################### -->
+
+	<!-- Appends nothing -->
+	<appender name="NullAppender" class="org.apache.log4j.varia.NullAppender">
+	</appender>
+
+	<!-- Appends to Console (i.e. System.out) -->
+	<appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+	</appender>
+
+	<!-- Appends out log to a File -->
+	<appender name="OutFileAppender" class="org.apache.log4j.FileAppender">
+		<param name="File" value="${log.dir}/${log.filename}_out.log" />
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+
+		<!-- enable filter to allow appending only logs belonging to certain level range -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="DEBUG" />
+			<param name="levelMax" value="INFO" />
+			<param name="acceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!-- Appends error log to a File -->
+	<appender name="ErrorFileAppender" class="org.apache.log4j.FileAppender">
+		<param name="File" value="${log.dir}/${log.filename}_err.log" />
+		<param name="Threshold" value="WARN" />
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+
+		<!-- enable filter to allow appending only logs belonging to certain-level -->
+		<!-- 
+		<filter class="org.apache.log4j.varia.LevelRangeFilter"> 
+			<param name="levelMin" value="WARN" /> 
+			<param name="levelMax" value="ERROR" /> 
+			<param name="acceptOnMatch" value="true" /> 
+		</filter> 
+		-->
+	</appender>
+
+	<!-- Appends out log to a File. File is rolled over if MaxFileSize is exceeded. Last n (denoted by MaxBackupIndex) files 
+		are kept for backup -->
+	<appender name="OutSizeBasedRollingFileAppender" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${log.dir}/${log.filename}_out.log" />
+		<param name="append" value="true" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+
+		<!-- enable filter to allow appending only logs belonging to certain level range -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="DEBUG" />
+			<param name="levelMax" value="INFO" />
+			<param name="acceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!-- Appends error log to a File. File is rolled over if MaxFileSize is exceeded. Last n (denoted by MaxBackupIndex) files 
+		are kept for backup -->
+	<appender name="ErrorSizeBasedRollingFileAppender" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${log.dir}/${log.filename}_err.log" />
+		<param name="Threshold" value="warn" />
+		<param name="append" value="true" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+
+		<!-- 
+		<filter class="org.apache.log4j.varia.LevelRangeFilter"> 
+			<param name="levelMin" value="WARN" /> 
+			<param name="levelMax" value="ERROR" /> 
+			<param name="acceptOnMatch" value="true" /> 
+		</filter> 
+		-->
+	</appender>
+
+	<!-- Appends out log to a File. File is rolled over if MaxFileSize is exceeded or new day is started. -->
+	<!-- Last n (denoted by MaxBackupIndex) files are kept for backup. File name is suffixed by DatePattern value. -->
+	<!-- Ex: ${log.filename}_out.log.20120101 -->
+	<appender name="OutDailySizeBasedRollingFileAppender" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${log.dir}/${log.filename}_out.log" />
+		<param name="append" value="true" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+
+		<!-- enable filter to allow appending only logs belonging to certain level range -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="DEBUG" />
+			<param name="levelMax" value="INFO" />
+			<param name="acceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!-- Appends error log to a File. File is rolled over if MaxFileSize is exceeded or new day is started. -->
+	<!-- Last n (denoted by MaxBackupIndex) files are kept for backup. File name is suffixed by DatePattern value. -->
+	<!-- Ex: ${log.filename}_err.log.20120101 -->
+	<appender name="ErrorDailySizeBasedRollingFileAppender" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${log.dir}/${log.filename}_err.log" />
+		<param name="Threshold" value="warn" />
+		<param name="append" value="true" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+
+		<!-- 
+		<filter class="org.apache.log4j.varia.LevelRangeFilter"> 
+			<param name="levelMin" value="WARN" /> 
+			<param name="levelMax" value="ERROR" /> 
+			<param name="acceptOnMatch" value="true" /> 
+		</filter> 
+		-->
+	</appender>
+
+	<!-- Appends out log to a File. File is rolled over at midnight. Old log file is gzipped, renamed and moved to the archive folder. -->
+	<!-- Ex: active file path: ../${log.dir}/${log.filename}_out.log, old file path: ../${log.dir}/archive/${log.filename}_out.20120101.log.gz -->
+	<appender name="OutPolicyBasedRollingFileAppender" class="org.apache.log4j.rolling.RollingFileAppender">
+		<param name="append" value="true" />
+
+		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+			<param name="FileNamePattern" value="${log.dir}/archive/${log.filename}_out.%d{yyyyMMdd}.log.gz" />
+			<param name="ActiveFileName" value="${log.dir}/${log.filename}_out.log" />
+		</rollingPolicy>
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+
+		<!-- enable filter to allow appending only logs belonging to certain level range -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="DEBUG" />
+			<param name="levelMax" value="INFO" />
+			<param name="acceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!-- Appends error log to a File. File is rolled over at midnight. Old log file is gzipped, renamed and moved to the archive 
+		folder. -->
+	<!-- Ex: active file path: ../${log.dir}/${log.filename}_err.log, old file path: ../${log.dir}/archive/${log.filename}_err.20120101.log.gz -->
+	<appender name="ErrorPolicyBasedRollingFileAppender" class="org.apache.log4j.rolling.RollingFileAppender">
+		<param name="Threshold" value="warn" />
+		<param name="append" value="true" />
+
+		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+			<param name="FileNamePattern" value="${log.dir}/archive/${log.filename}_err.%d{yyyyMMdd}.log.gz" />
+			<param name="ActiveFileName" value="${log.dir}/${log.filename}_err.log" />
+		</rollingPolicy>
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%-5p] [%t] [%-10c] - %m\r\n" />
+		</layout>
+
+		<!-- 
+		<filter class="org.apache.log4j.varia.LevelRangeFilter"> 
+			<param name="levelMin" value="WARN" /> 
+			<param name="levelMax" value="ERROR" /> 
+			<param name="acceptOnMatch" value="true" /> 
+		</filter> 
+		-->
+	</appender>
+
+	<!-- ################################# APPENDERS ######################################### -->
+
+	<!-- ################################## LOGGERS ########################################## -->
+
+	<!-- Specific loggers can be defined to specifically configure logging behavior of certain parts of the code. -->
+	<!-- For example, db logs can be directed to another file, or for debugging purposes debug logging can be enabled -->
+	<!-- only for the notification package (in order to keep log file small). -->
+
+	<!-- Under normal circumstances, root logger should suffice. -->
+
+	<!-- ================================== ANAGRAM LOGGERS ================================== -->
+
+	<logger name="kata.text.anagram.logging.LoggingAnagramCrawler" additivity="false">
+		<level value="debug" />
+
+		<appender-ref ref="OutPolicyBasedRollingFileAppender" />
+		<appender-ref ref="ErrorPolicyBasedRollingFileAppender" />
+
+	</logger>
+	
+	<!-- ================================== ANAGRAM LOGGERS ================================== -->
+
+	<!-- ===================================== ROOT LOGGER =================================== -->
+	
+	<root>
+		<level value="info" />
+		<!-- <appender-ref ref="NullAppender"/> -->
+
+		<appender-ref ref="OutPolicyBasedRollingFileAppender" />
+		<appender-ref ref="ErrorPolicyBasedRollingFileAppender" />
+
+		<!-- 
+		<appender-ref ref="ConsoleAppender" /> 
+		<appender-ref ref="OutDailySizeBasedRollingFileAppender" /> 
+		<appender-ref ref="ErrorDailySizeBasedRollingFileAppender" /> 
+		-->
+		
+	</root>
+
+	<!-- ===================================== ROOT LOGGER =================================== -->
+	
+	<!-- ################################## LOGGERS ########################################## -->
+
+</log4j:configuration>

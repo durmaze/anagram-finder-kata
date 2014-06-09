@@ -1,0 +1,51 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+// Build stuff with jdk 1.8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+buildDir = 'target'
+project.group = "kata.text"
+project.description = "Anagram Finder"
+project.version = "1.0.0-SNAPSHOT"
+
+sourceSets.main.output.classesDir = file("${buildDir}/classes")
+sourceSets.test.output.classesDir = file("${buildDir}/test-classes")  
+
+   
+artifacts {
+   jar {
+
+      from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } } {
+         exclude "META-INF/*.SF"
+         exclude "META-INF/*.DSA"
+         exclude "META-INF/*.RSA"
+      }
+
+      manifest {
+         attributes 'Implementation-Title': project.description,
+               'Implementation-Version': project.version,
+               'Built-By': System.getProperty('user.name'),
+               'Built-Date': new Date(),
+               'Built-JDK': System.getProperty('java.version'),
+               'Main-Class': "kata.text.anagram.main.AnagramFinderApp"
+      }
+   }
+}
+
+repositories {
+   mavenLocal()
+   mavenCentral()
+}
+
+dependencies {
+
+   compile 'org.slf4j:slf4j-api:1.7.7'
+   compile 'org.slf4j:slf4j-log4j12:1.7.7'
+   compile 'log4j:log4j:1.2.17'
+   compile 'log4j:apache-log4j-extras:1.2.17'
+
+   testCompile 'junit:junit:4.11'
+   testCompile 'org.hamcrest:hamcrest-all:1.3'
+   testCompile 'org.mockito:mockito-all:1.9.5'
+}
